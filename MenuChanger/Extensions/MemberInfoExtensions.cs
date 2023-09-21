@@ -1,6 +1,8 @@
 ﻿using MenuChanger.Attributes;
 using System.Reflection;
 
+using _PropertyInfo = Shims.NET.System.Reflection.PropertyInfo;
+
 namespace MenuChanger.Extensions
 {
     public static class MemberInfoExtensions
@@ -23,7 +25,7 @@ namespace MenuChanger.Extensions
                 PropertyInfo pi = (PropertyInfo)mi;
                 if (!pi.CanRead || !pi.CanWrite) return false;
 
-                if (pi.GetMethod.IsPublic && !Attribute.IsDefined(pi, typeof(MenuIgnoreAttribute)) || Attribute.IsDefined(pi, typeof(MenuIncludeAttribute))) return true;
+                if (pi.GetGetMethod(true).IsPublic && !Attribute.IsDefined(pi, typeof(MenuIgnoreAttribute)) || Attribute.IsDefined(pi, typeof(MenuIncludeAttribute))) return true;
                 return false;
             }
 
@@ -51,7 +53,7 @@ namespace MenuChanger.Extensions
             return mi.MemberType switch
             {
                 MemberTypes.Field => ((FieldInfo)mi).GetValue(o),
-                MemberTypes.Property => ((PropertyInfo)mi).GetValue(o),
+                MemberTypes.Property => _PropertyInfo.GetValue((PropertyInfo)mi, o),
                 _ => throw new NotImplementedException(),
             };
         }
@@ -68,7 +70,7 @@ namespace MenuChanger.Extensions
                     ((FieldInfo)mi).SetValue(o, value);
                     break;
                 case MemberTypes.Property:
-                    ((PropertyInfo)mi).SetValue(o, value);
+                    _PropertyInfo.SetValue((PropertyInfo)mi, o, value);
                     break;
                 default:
                     throw new NotImplementedException();

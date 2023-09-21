@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine.EventSystems;
-using UnityEngine.UI.Extensions;
 
 namespace MenuChanger
 {
@@ -17,12 +16,6 @@ namespace MenuChanger
         }
 
         internal static GameObject SteelModeButtonObject
-        {
-            get => Get();
-            set => Set(value);
-        }
-
-        internal static GameObject GGModeButtonObject
         {
             get => Get();
             set => Set(value);
@@ -66,12 +59,9 @@ namespace MenuChanger
 
             ClassicModeButtonObject = UObject.Instantiate(UIManager.instance.playModeMenuScreen.defaultHighlight.gameObject);
             SteelModeButtonObject = UObject.Instantiate(UIManager.instance.playModeMenuScreen.defaultHighlight.FindSelectableOnDown().gameObject);
-            GGModeButtonObject = UObject.Instantiate(UIManager.instance.playModeMenuScreen.content.transform.Find("GGButton").gameObject);
             BackButtonObject = UObject.Instantiate(UIManager.instance.playModeMenuScreen.defaultHighlight
                 .FindSelectableOnDown().FindSelectableOnDown().gameObject);
-            DescTextObject = UObject.Instantiate(
-                UIManager.instance.extrasContentMenuScreen.content.gameObject.transform.Find("ScrollRect").Find("DescriptionText").gameObject);
-            UObject.Destroy(indexedPrefabs[nameof(DescTextObject)].GetComponent<SoftMaskScript>());
+            DescTextObject = ConstructDescriptionText();
         }
 
         internal static void Dispose()
@@ -81,6 +71,41 @@ namespace MenuChanger
                 if (kvp.Value != null) UObject.Destroy(kvp.Value);
             }
             indexedPrefabs.Clear();
+        }
+
+        internal static GameObject ConstructDescriptionText()
+        {
+            var go = new GameObject("DescriptionText", typeof(RectTransform));
+
+            var rect = go.GetComponent<RectTransform>();
+            var canvas = go.AddComponent<CanvasRenderer>();
+            var text = go.AddComponent<Text>();
+            var fitter = go.AddComponent<ContentSizeFitter>();
+
+            rect.localScale = new Vector3(1, 1, 1);
+            rect.localPosition = new Vector3(0, 0.0002f, 0);
+            rect.anchorMax = new Vector2(1, 1);
+            rect.anchorMin = new Vector2(0, 1);
+            rect.pivot = new Vector2(0.5f, 1);
+            rect.sizeDelta = new Vector2(0, 944.7246f);
+
+            canvas.cull = false;
+            canvas.DisableRectClipping();
+
+            text.font = Modding.CanvasUtil.GetFont("Perpetua");
+            text.fontSize = 46;
+            text.horizontalOverflow = HorizontalWrapMode.Wrap;
+            text.lineSpacing = 0.85f;
+            text.resizeTextMaxSize = 48;
+            text.resizeTextMinSize = 20;
+            text.verticalOverflow = VerticalWrapMode.Truncate;
+            text.text = "\nFREE CONTENT PACK 03\n\nORIGINAL RELEASE DATE: Early 2018\n\nDESCRIPTION: Take your place amongst the Gods in an epic celebration of Hallownest's Glory and the final chapter of the Knight's journey.\n\nNew Character and Quest - The Godseeker arrives. Break her chains and aid her in an ancient duty.\n\nNew Boss Fights - Hallownest's greatest warriors raise their blades.\n\nNew Game Mode - Long requested and a classic for the genre. Complete the Godseeker's quest to unlock the new mode.\n\nNew Music - All new soaring boss tracks and giant remixes of beloved classics.\n\n\n";
+
+            fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            //UObject.DontDestroyOnLoad(go);
+            return go;
         }
 
         public static void Normalize(MenuPage page, params GameObject[] gs)
@@ -96,15 +121,6 @@ namespace MenuChanger
         public static (GameObject, Text, CanvasGroup) BuildDescText(MenuPage page, string text)
         {
             GameObject obj = DescTextObject;
-            
-            // prevent null ref logs
-            SoftMaskScript sms = obj.GetComponent<SoftMaskScript>();
-            if (sms != null)
-            {
-                typeof(Graphic).GetField("m_Canvas", BindingFlags.NonPublic | BindingFlags.Instance)
-                    .SetValue(sms.GetComponent<Graphic>(), UIManager.instance.UICanvas);
-                UObject.DestroyImmediate(sms, true);
-            }
 
             // set text and remove scrollbar mask
             Text t = obj.GetComponent<Text>();
@@ -136,12 +152,10 @@ namespace MenuChanger
                 case Mode.Steel:
                     button = SteelModeButtonObject.GetComponent<MenuButton>();
                     break;
-                case Mode.Godmaster:
-                    button = GGModeButtonObject.GetComponent<MenuButton>();
-                    break;
             }
             button.buttonType = MenuButton.MenuButtonType.Proceed;
-            UObject.Destroy(button.gameObject.GetComponent<StartGameEventTrigger>());
+            var eventTrigger = button.gameObject.GetComponent<EventTrigger>();
+            eventTrigger.triggers = eventTrigger.triggers.Where(t => t.eventID != EventTriggerType.PointerClick).ToList();
             button.cancelAction = GlobalEnums.CancelAction.CustomCancelAction;
             button.navigation = new Navigation
             {
@@ -188,7 +202,8 @@ namespace MenuChanger
             MenuButton button = ClassicModeButtonObject.GetComponent<MenuButton>();
             button.buttonType = MenuButton.MenuButtonType.Proceed;
             button.cancelAction = GlobalEnums.CancelAction.CustomCancelAction;
-            UObject.Destroy(button.gameObject.GetComponent<StartGameEventTrigger>());
+            var eventTrigger = button.gameObject.GetComponent<EventTrigger>();
+            eventTrigger.triggers = eventTrigger.triggers.Where(t => t.eventID != EventTriggerType.PointerClick).ToList();
 
             Transform textTrans = button.transform.Find("Text");
             UObject.Destroy(textTrans.GetComponent<AutoLocalizeTextUI>());
@@ -216,7 +231,8 @@ namespace MenuChanger
         {
             MenuButton button = ClassicModeButtonObject.GetComponent<MenuButton>();
             button.buttonType = MenuButton.MenuButtonType.Proceed;
-            UObject.Destroy(button.gameObject.GetComponent<StartGameEventTrigger>());
+            var eventTrigger = button.gameObject.GetComponent<EventTrigger>();
+            eventTrigger.triggers = eventTrigger.triggers.Where(t => t.eventID != EventTriggerType.PointerClick).ToList();
             button.cancelAction = GlobalEnums.CancelAction.CustomCancelAction;
 
             Transform textTrans = button.transform.Find("Text");
@@ -244,7 +260,8 @@ namespace MenuChanger
             MenuButton button = ClassicModeButtonObject.GetComponent<MenuButton>();
             button.buttonType = MenuButton.MenuButtonType.Proceed;
             button.cancelAction = GlobalEnums.CancelAction.CustomCancelAction;
-            UObject.Destroy(button.gameObject.GetComponent<StartGameEventTrigger>());
+            var eventTrigger = button.gameObject.GetComponent<EventTrigger>();
+            eventTrigger.triggers = eventTrigger.triggers.Where(t => t.eventID != EventTriggerType.PointerClick).ToList();
 
             UObject.Destroy(button.transform.Find("Text").GetComponent<Text>());
             UObject.Destroy(button.transform.Find("DescriptionText").GetComponent<Text>());
@@ -339,15 +356,6 @@ namespace MenuChanger
         public static (GameObject, InputField) BuildMultiLineEntryField(MenuPage page)
         {
             GameObject obj = DescTextObject;
-
-            // prevent null ref logs
-            SoftMaskScript sms = obj.GetComponent<SoftMaskScript>();
-            if (sms != null)
-            {
-                typeof(Graphic).GetField("m_Canvas", BindingFlags.NonPublic | BindingFlags.Instance)
-                    .SetValue(sms.GetComponent<Graphic>(), UIManager.instance.UICanvas);
-                UObject.DestroyImmediate(sms, true);
-            }
 
             // remove scrollbar mask
             Text t = obj.GetComponent<Text>();

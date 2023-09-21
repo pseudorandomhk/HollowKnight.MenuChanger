@@ -1,6 +1,7 @@
 ﻿using MenuChanger.Attributes;
 using MenuChanger.Extensions;
 using System.Reflection;
+using static Shims.NET.System.Reflection.MemberInfo;
 
 namespace MenuChanger.MenuElements
 {

@@ -23,13 +23,12 @@ namespace MenuChanger
         private static List<ModeMenuConstructor> constructors = new()
         {
             new DefaultModeConstructor(Mode.Classic),
-            new DefaultModeConstructor(Mode.Steel),
-            new DefaultModeConstructor(Mode.Godmaster),
+            new DefaultModeConstructor(Mode.Steel)
         };
 
         internal static void OnEnterMainMenu()
         {
-            if (constructors.Count <= 3)
+            if (constructors.Count <= 2)
             {
                 MenuChangerMod.instance.Log("Mode menu was not requested, skipping construction...");
                 return;
@@ -104,7 +103,7 @@ namespace MenuChanger
                 button.OnClick += () =>
                 {
                     MenuChangerMod.HideAllMenuPages();
-                    UIManager.instance.StartNewGame(permaDeath: mode == Mode.Steel, bossRush: mode == Mode.Godmaster);
+                    UIManager.instance.StartNewGame(permadeathMode: mode == Mode.Steel);
                 };
 
                 GameManager.instance.RefreshLanguageText += RefreshLanguage;
@@ -133,7 +132,6 @@ namespace MenuChanger
             {
                 Mode.Classic => true,
                 Mode.Steel => GameManager.instance.GetStatusRecordInt("RecPermadeathMode") == 1,
-                Mode.Godmaster => GameManager.instance.GetStatusRecordInt("RecBossRushMode") == 1,
                 _ => true,
             };
 
@@ -147,7 +145,6 @@ namespace MenuChanger
             {
                 return mode switch
                 {
-                    Mode.Godmaster => Language.Language.Get("MODE_GODSGLORY", "CP3"),
                     _ => Language.Language.Get(mode == Mode.Classic ? "MODE_NORMAL" : "MODE_STEEL", "MainMenu"),
                 };
             }
@@ -156,7 +153,6 @@ namespace MenuChanger
             {
                 return mode switch
                 {
-                    Mode.Godmaster => Language.Language.Get("MODE_GODSGLORY_DESC", "CP3"),
                     _ => Language.Language.Get(mode == Mode.Classic ? "NORMAL_MODE_TEXT" : "STEEL_MODE_TEXT", "MainMenu"),
                 };
             }

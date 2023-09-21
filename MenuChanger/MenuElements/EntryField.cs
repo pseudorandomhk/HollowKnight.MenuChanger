@@ -1,6 +1,8 @@
 ﻿using MenuChanger.Attributes;
 using MenuChanger.Extensions;
 using System.Reflection;
+using static Shims.NET.System.Reflection.MemberInfo;
+using Array = Shims.NET.System.Array;
 
 namespace MenuChanger.MenuElements
 {

@@ -1,4 +1,5 @@
 ﻿using MenuChanger.Extensions;
+using System.Collections.ObjectModel;
 
 namespace MenuChanger.NavigationTypes
 {
@@ -10,7 +11,7 @@ namespace MenuChanger.NavigationTypes
         /// </summary>
         public List<ISelectable> Selectables = new();
 
-        public override IReadOnlyCollection<ISelectable> Items => Selectables.AsReadOnly();
+        public override ReadOnlyCollection<ISelectable> Items => Selectables.AsReadOnly();
 
         public SimpleHorizontalNavigation(MenuPage page) : base(page)
         {

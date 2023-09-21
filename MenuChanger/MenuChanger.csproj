@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{D4361348-A69E-4CDD-988E-7AC0B7EDA035}</ProjectGuid>
     <AssemblyTitle>MenuChanger</AssemblyTitle>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net35</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <LangVersion>latest</LangVersion>
     <AssemblyVersion>1.1.0</AssemblyVersion>
@@ -12,7 +12,7 @@
     <ImplicitUsings>true</ImplicitUsings>
     <Nullable>annotations</Nullable>
     <NoWarn>1701;1702;CS1591;IDE0018</NoWarn>
-    <HollowKnightRefs>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight_Data\Managed</HollowKnightRefs>
+    <HollowKnightRefs>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight 1028\hollow_knight_Data\Managed</HollowKnightRefs>
   </PropertyGroup>
   <Import Project="LocalOverrides.targets" Condition="Exists('LocalOverrides.targets')"/>
   <ItemGroup>
@@ -43,27 +43,27 @@
     <Reference Include="UnityEngine">
       <HintPath>$(HollowKnightRefs)\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>$(HollowKnightRefs)\UnityEngine.AnimationModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(HollowKnightRefs)\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>$(HollowKnightRefs)\UnityEngine.ImageConversionModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>$(HollowKnightRefs)\UnityEngine.IMGUIModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>$(HollowKnightRefs)\UnityEngine.TextRenderingModule.dll</HintPath>
-    </Reference>
+<!--    <Reference Include="UnityEngine.AnimationModule">-->
+<!--      <HintPath>$(HollowKnightRefs)\UnityEngine.AnimationModule.dll</HintPath>-->
+<!--    </Reference>-->
+<!--    <Reference Include="UnityEngine.CoreModule">-->
+<!--      <HintPath>$(HollowKnightRefs)\UnityEngine.CoreModule.dll</HintPath>-->
+<!--    </Reference>-->
+<!--    <Reference Include="UnityEngine.ImageConversionModule">-->
+<!--      <HintPath>$(HollowKnightRefs)\UnityEngine.ImageConversionModule.dll</HintPath>-->
+<!--    </Reference>-->
+<!--    <Reference Include="UnityEngine.IMGUIModule">-->
+<!--      <HintPath>$(HollowKnightRefs)\UnityEngine.IMGUIModule.dll</HintPath>-->
+<!--    </Reference>-->
+<!--    <Reference Include="UnityEngine.TextRenderingModule">-->
+<!--      <HintPath>$(HollowKnightRefs)\UnityEngine.TextRenderingModule.dll</HintPath>-->
+<!--    </Reference>-->
     <Reference Include="UnityEngine.UI">
       <HintPath>$(HollowKnightRefs)\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UIModule">
-      <HintPath>$(HollowKnightRefs)\UnityEngine.UIModule.dll</HintPath>
-    </Reference>
+<!--    <Reference Include="UnityEngine.UIModule">-->
+<!--      <HintPath>$(HollowKnightRefs)\UnityEngine.UIModule.dll</HintPath>-->
+<!--    </Reference>-->
   </ItemGroup>
   <Target Name="CopyMod" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(TargetPath);$(TargetDir)$(TargetName).pdb;$(TargetDir)$(TargetName).xml" DestinationFolder="$(HollowKnightRefs)\Mods\$(TargetName)" SkipUnchangedFiles="true" />

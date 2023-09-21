@@ -28,6 +28,7 @@
                     break;
                 case Style.Body:
                     (GameObject, Text, CanvasGroup) = PrefabMenuObjects.BuildDescText(Parent, text);
+                    //Log($"MenuLabel: scale {GameObject.transform.localScale}");
                     break;
             }
         }

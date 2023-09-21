@@ -36,11 +36,12 @@ namespace MenuChanger.MenuElements
 
             Caption = caption;
             Label = new MenuLabel(page, caption(Ts[Value]), MenuLabel.Style.Body);
+            var oldScale = Label.GameObject.transform.localScale;
 
             // evil code
             Label.GameObject.transform.SetParent(GameObject.transform);
             Label.GameObject.transform.localPosition = new Vector3(0, -25, 0);
-            Label.GameObject.transform.localScale *= 0.7f;
+            Label.GameObject.transform.localScale = oldScale;
 
             Label.Text.alignment = TextAnchor.MiddleCenter;
             SelfChanged += s => UpdateCaption();

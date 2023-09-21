@@ -3,7 +3,6 @@
     public enum Mode
     {
         Classic,
-        Steel,
-        Godmaster
+        Steel
     }
 }

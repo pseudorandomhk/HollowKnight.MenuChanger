@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Diagnostics;
 using System.Text;
+using static Shims.NET.System.Text.StringBuilder;
 
 namespace MenuChanger.MenuElements
 {

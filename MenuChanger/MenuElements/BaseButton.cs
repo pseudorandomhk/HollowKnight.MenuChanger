@@ -1,4 +1,5 @@
 ﻿using MenuChanger.Extensions;
+using UnityEngine.EventSystems;
 
 namespace MenuChanger.MenuElements
 {
@@ -34,6 +35,7 @@ namespace MenuChanger.MenuElements
 
             Parent.Add(GameObject);
             GameObject.transform.localPosition = Vector3.zero;
+            newButton.ClearEvents(); // get rid of any random events that happen to be on the original
             newButton.AddEvent(InvokeOnClick);
             newButton.customCancelAction = (s) => InvokeOnCancel();
             OnCancel = page.GoBack;

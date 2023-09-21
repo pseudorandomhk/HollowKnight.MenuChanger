@@ -47,7 +47,7 @@ namespace MenuChanger
                 MenuChangerMod.HideAllMenuPages();
                 transitionPage.Show();
                 unloadingLabel.Show();
-                self.StartCoroutine(GameManager.instance.ReturnToMainMenu(GameManager.ReturnToMainMenuSaveModes.DontSave));
+                self.StartCoroutine(GameManager.instance.ReturnToMainMenu(false));
             }
             else orig(self);
         }
@@ -84,7 +84,7 @@ namespace MenuChanger
 
         private static void SaveSlotButton_OnSubmit(On.UnityEngine.UI.SaveSlotButton.orig_OnSubmit orig, SaveSlotButton self, UnityEngine.EventSystems.BaseEventData eventData)
         {
-            if (self.saveFileState == SaveSlotButton.SaveFileStates.LoadedStats
+            if (ReflectionHelper.GetField<SaveSlotButton, bool>(self, "haveSaveFile")
                 && self.GetSaveStats().permadeathMode != 2)
             {
                 try
@@ -102,7 +102,7 @@ namespace MenuChanger
                     MenuChangerMod.instance.LogError($"Unable to manually load settings from menu!\n{e}");
                 }
             }
-            else if (self.saveFileState == SaveSlotButton.SaveFileStates.Empty)
+            else if (!ReflectionHelper.GetField<SaveSlotButton, bool>(self, "haveSaveFile"))
             {
                 GameManager.instance.profileID = self.GetSaveSlotIndex();
                 UIManager.instance.UIGoToPlayModeMenu();
@@ -115,13 +115,9 @@ namespace MenuChanger
 
         private static IEnumerator LoadGameAndDoAction(int slot, Action a)
         {
-            bool finishedLoading = false;
+            bool finishedLoading = true;        // LoadGame is blocking on 1028
             bool successfullyLoaded = false;
-            GameManager.instance.LoadGame(slot, (b) =>
-            {
-                finishedLoading = true;
-                successfullyLoaded = b;
-            });
+            successfullyLoaded = GameManager.instance.LoadGame(slot);
             while (!finishedLoading) yield return null;
             if (!successfullyLoaded)
             {

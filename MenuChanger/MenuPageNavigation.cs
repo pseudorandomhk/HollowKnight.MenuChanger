@@ -1,4 +1,6 @@
-﻿namespace MenuChanger
+﻿using System.Collections.ObjectModel;
+
+namespace MenuChanger
 {
     /// <summary>
     /// Class used to handle navigation between root level elements of a MenuPage.
@@ -12,7 +14,7 @@
 
         public MenuPage Page { get; }
 
-        public abstract IReadOnlyCollection<ISelectable> Items { get; }
+        public abstract ReadOnlyCollection<ISelectable> Items { get; }
 
         /// <summary>
         /// Adds the ISelectable to navigation control.
